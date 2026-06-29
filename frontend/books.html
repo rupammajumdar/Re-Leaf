@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Books — Re-Leaf Book</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            50: '#f5f4ff', 100: '#ebe9ff', 200: '#dcd8ff', 300: '#c5beff', 400: '#a79eff', 500: '#877aff', 600: '#6c63ff', 700: '#5c52e6', 800: '#4c42c2', 900: '#3e379e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+
+    <nav id="navbar"></nav>
+
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-8">
+                
+                <!-- Left Sidebar Filters -->
+                <aside class="w-full md:w-64 shrink-0 flex flex-col gap-6">
+                    <div class="glass p-6 rounded-2xl border border-white/5 flex flex-col gap-5">
+                        <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                            <h3 class="font-bold text-white text-sm">Filters</h3>
+                            <button id="clear-filters-btn" class="text-xs text-indigo-400 hover:underline">Reset All</button>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-semibold text-indigo-200/50 uppercase tracking-wider">Category</label>
+                            <select id="filter-category" class="glass px-3 py-2.5 rounded-xl text-xs w-full text-white bg-transparent border-white/10 focus:outline-none">
+                                <option value="" class="bg-[#0F0F1A] text-indigo-200">All Categories</option>
+                                <!-- Loaded dynamically -->
+                            </select>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-semibold text-indigo-200/50 uppercase tracking-wider">Price (₹)</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="filter-min-price" placeholder="Min" class="glass px-3 py-2 rounded-xl text-xs text-white bg-transparent border-white/10 placeholder-indigo-200/20 w-full focus:outline-none">
+                                <input type="number" id="filter-max-price" placeholder="Max" class="glass px-3 py-2 rounded-xl text-xs text-white bg-transparent border-white/10 placeholder-indigo-200/20 w-full focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Condition -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-semibold text-indigo-200/50 uppercase tracking-wider">Book Condition</label>
+                            <select id="filter-condition" class="glass px-3 py-2.5 rounded-xl text-xs w-full text-white bg-transparent border-white/10 focus:outline-none">
+                                <option value="" class="bg-[#0F0F1A]">All Conditions</option>
+                                <option value="NEW" class="bg-[#0F0F1A]">New</option>
+                                <option value="LIKE_NEW" class="bg-[#0F0F1A]">Like New</option>
+                                <option value="VERY_GOOD" class="bg-[#0F0F1A]">Very Good</option>
+                                <option value="GOOD" class="bg-[#0F0F1A]">Good</option>
+                                <option value="ACCEPTABLE" class="bg-[#0F0F1A]">Acceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- Rating -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-semibold text-indigo-200/50 uppercase tracking-wider">Min Rating</label>
+                            <select id="filter-rating" class="glass px-3 py-2.5 rounded-xl text-xs w-full text-white bg-transparent border-white/10 focus:outline-none">
+                                <option value="" class="bg-[#0F0F1A]">Any Rating</option>
+                                <option value="4" class="bg-[#0F0F1A]">4★ & above</option>
+                                <option value="3" class="bg-[#0F0F1A]">3★ & above</option>
+                                <option value="2" class="bg-[#0F0F1A]">2★ & above</option>
+                            </select>
+                        </div>
+
+                        <!-- Language -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-semibold text-indigo-200/50 uppercase tracking-wider">Language</label>
+                            <select id="filter-language" class="glass px-3 py-2.5 rounded-xl text-xs w-full text-white bg-transparent border-white/10 focus:outline-none">
+                                <option value="" class="bg-[#0F0F1A]">Any Language</option>
+                                <option value="English" class="bg-[#0F0F1A]">English</option>
+                                <option value="Hindi" class="bg-[#0F0F1A]">Hindi</option>
+                                <option value="Sanskrit" class="bg-[#0F0F1A]">Sanskrit</option>
+                                <option value="Regional" class="bg-[#0F0F1A]">Regional</option>
+                            </select>
+                        </div>
+
+                        <!-- Sort By -->
+                        <div class="flex flex-col gap-2">
+                            <label class="text-xs font-semibold text-indigo-200/50 uppercase tracking-wider">Sort By</label>
+                            <select id="filter-sort" class="glass px-3 py-2.5 rounded-xl text-xs w-full text-white bg-transparent border-white/10 focus:outline-none">
+                                <option value="newest" class="bg-[#0F0F1A]">Newest Listings</option>
+                                <option value="price_asc" class="bg-[#0F0F1A]">Price: Low to High</option>
+                                <option value="price_desc" class="bg-[#0F0F1A]">Price: High to Low</option>
+                                <option value="rating" class="bg-[#0F0F1A]">Customer Ratings</option>
+                            </select>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Books List Section -->
+                <section class="flex-grow flex flex-col gap-6">
+                    
+                    <!-- Search bar and counter metadata -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                        <div class="relative w-full sm:max-w-md">
+                            <input type="text" id="books-search-input" placeholder="Search title, author or seller..." class="glass pl-10 pr-4 py-2.5 rounded-xl text-sm text-white bg-transparent border-white/10 placeholder-indigo-200/20 w-full focus:outline-none">
+                            <i class="fas fa-search absolute left-3.5 top-3.5 text-indigo-300/30 text-sm"></i>
+                        </div>
+                        <p class="text-xs text-indigo-200/50 uppercase tracking-wider" id="results-count">Showing 0 listings</p>
+                    </div>
+
+                    <!-- Book Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="books-grid">
+                        <!-- Skeleton placeholders or books injected -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-center items-center gap-2 mt-8 hidden" id="pagination-container">
+                        <button id="prev-page-btn" class="btn-outline px-4 py-2 text-xs rounded-xl flex items-center gap-1.5"><i class="fas fa-chevron-left"></i> Prev</button>
+                        <span class="text-xs font-semibold text-indigo-200/50" id="current-page-text">Page 1 of 1</span>
+                        <button id="next-page-btn" class="btn-outline px-4 py-2 text-xs rounded-xl flex items-center gap-1.5">Next <i class="fas fa-chevron-right"></i></button>
+                    </div>
+
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer"></footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/books.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavbar('browse');
+            initFooter();
+            initBooksPage();
+        });
+    </script>
+</body>
+</html>

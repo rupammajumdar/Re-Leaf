@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Re-Leaf Book — Give Your Books a Second Life</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            50: '#f5f4ff',
+                            100: '#ebe9ff',
+                            200: '#dcd8ff',
+                            300: '#c5beff',
+                            400: '#a79eff',
+                            500: '#877aff',
+                            600: '#6c63ff',
+                            700: '#5c52e6',
+                            800: '#4c42c2',
+                            900: '#3e379e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Global and animation stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+
+    <!-- Three.js Background Canvas -->
+    <canvas id="three-canvas" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"></canvas>
+
+    <!-- Navigation Header -->
+    <nav id="navbar"></nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow pt-16">
+        
+        <!-- Hero Section -->
+        <section class="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
+            <div class="max-w-4xl w-full text-center relative z-10 flex flex-col items-center gap-6 mt-8">
+                <span class="px-4 py-1.5 rounded-full text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 uppercase tracking-widest animate-fade-in-down">
+                    🌿 Second-Hand Book Revolution
+                </span>
+                <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-none animate-fade-in-up stagger-1">
+                    Give Your Books a <span class="bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">Second Life.</span>
+                </h1>
+                <p class="text-lg text-indigo-200/70 max-w-xl animate-fade-in-up stagger-2">
+                    Buy and sell second-hand textbooks, competitive exam guides, novels, and more. Less expense, more reading, more trees saved.
+                </p>
+
+                <!-- Search Card -->
+                <div class="w-full max-w-2xl glass-card p-2 flex flex-col sm:flex-row gap-2 mt-4 animate-fade-in-up stagger-3">
+                    <div class="flex-grow flex items-center gap-3 px-3 py-2">
+                        <i class="fas fa-search text-indigo-300/40 text-lg"></i>
+                        <input type="text" id="hero-search-input" placeholder="Search by title, author, category, or publisher..." class="bg-transparent text-white placeholder-indigo-200/30 text-sm focus:outline-none w-full">
+                    </div>
+                    <button id="hero-search-btn" class="btn-primary flex items-center justify-center gap-2 py-3 px-6 rounded-xl text-sm font-semibold">
+                        Search Books
+                    </button>
+                </div>
+
+                <!-- Action CTAs -->
+                <div class="flex flex-wrap gap-4 justify-center items-center mt-2 animate-fade-in-up stagger-4">
+                    <a href="books.html" class="btn-outline py-3 px-6 rounded-xl text-sm font-semibold">Browse Listings</a>
+                    <a href="seller-dashboard.html" class="btn-secondary py-3 px-6 rounded-xl text-sm font-semibold">Start Selling</a>
+                </div>
+
+                <!-- Counters Section -->
+                <div class="grid grid-cols-3 gap-8 mt-12 w-full max-w-2xl border-t border-white/5 pt-8 text-center animate-fade-in-up stagger-5">
+                    <div>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white" id="counter-books">10k+</h3>
+                        <p class="text-xs text-indigo-200/50 uppercase tracking-wider mt-1">Books Available</p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white" id="counter-sellers">5k+</h3>
+                        <p class="text-xs text-indigo-200/50 uppercase tracking-wider mt-1">Verified Sellers</p>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white" id="counter-readers">50k+</h3>
+                        <p class="text-xs text-indigo-200/50 uppercase tracking-wider mt-1">Happy Readers</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Grid -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Popular Categories</h2>
+                <p class="text-indigo-200/50 text-sm">Explore books by standard syllabus or interest areas</p>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4" id="categories-container">
+                <!-- Loaded Dynamically by home.js -->
+            </div>
+        </section>
+
+        <!-- Featured & Trending Listings -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal">
+            <div class="flex justify-between items-end mb-8 border-b border-white/5 pb-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Trending Listings</h2>
+                    <p class="text-indigo-200/50 text-sm">Most popular books viewed by other students</p>
+                </div>
+                <a href="books.html?sort=trending" class="text-indigo-400 hover:text-indigo-300 text-sm font-semibold flex items-center gap-1">
+                    View All <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6" id="trending-container">
+                <!-- Injected Dynamically -->
+            </div>
+        </section>
+
+        <!-- Recently Added Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal">
+            <div class="flex justify-between items-end mb-8 border-b border-white/5 pb-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Recently Added</h2>
+                    <p class="text-indigo-200/50 text-sm">Fresh book drops uploaded by local sellers</p>
+                </div>
+                <a href="books.html?sort=newest" class="text-indigo-400 hover:text-indigo-300 text-sm font-semibold flex items-center gap-1">
+                    View All <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6" id="recent-container">
+                <!-- Injected Dynamically -->
+            </div>
+        </section>
+
+        <!-- Top Rated Sellers -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Top Rated Sellers</h2>
+                <p class="text-indigo-200/50 text-sm">Buy with confidence from highly rated student sellers</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="sellers-container">
+                <!-- Injected Dynamically -->
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">What Readers Say</h2>
+                <p class="text-indigo-200/50 text-sm">Join thousands of students saving money and trees</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 flex flex-col gap-4">
+                    <div class="flex gap-1 text-yellow-400"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-sm text-indigo-100 italic">"I bought my engineering syllabus textbooks at 60% discount. Delivery was fast and books were in great condition."</p>
+                    <div class="flex items-center gap-3 border-t border-white/5 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-400">AM</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Aniket Mehta</h4>
+                            <p class="text-xs text-indigo-200/40">IIT Bombay Student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-6 flex flex-col gap-4">
+                    <div class="flex gap-1 text-yellow-400"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-sm text-indigo-100 italic">"Selling my NEET prep guides was incredibly simple. The platform handles customer order confirmations seamlessly!"</p>
+                    <div class="flex items-center gap-3 border-t border-white/5 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-400">SP</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Sanya Patel</h4>
+                            <p class="text-xs text-indigo-200/40">Medical Graduate</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-6 flex flex-col gap-4">
+                    <div class="flex gap-1 text-yellow-400"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                    <p class="text-sm text-indigo-100 italic">"Great concept. Re-leaf makes it easy to source standard UPSC textbooks from graduates who no longer need them."</p>
+                    <div class="flex items-center gap-3 border-t border-white/5 pt-4">
+                        <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-400">RK</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Rohan Kumar</h4>
+                            <p class="text-xs text-indigo-200/40">Civil Services Aspirant</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQs Section -->
+        <section class="max-w-3xl mx-auto px-4 py-16 reveal">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Frequently Asked Questions</h2>
+                <p class="text-indigo-200/50 text-sm">Got questions about buy/sell transactions? We have answers.</p>
+            </div>
+            <div class="flex flex-col gap-4" id="faq-container">
+                <!-- Injected statically by home.js -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/three-bg.js"></script>
+    <script src="js/home.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeBackground();
+            initNavbar('home');
+            initFooter();
+            loadHomeData();
+        });
+    </script>
+</body>
+</html>

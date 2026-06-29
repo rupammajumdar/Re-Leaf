@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard — Re-Leaf Book</title>
+    <meta name="description" content="Manage your orders, wishlist, and profile on Re-Leaf Book.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { indigo: { 50:'#f5f4ff',100:'#ebe9ff',200:'#dcd8ff',300:'#c5beff',400:'#a79eff',500:'#877aff',600:'#6c63ff',700:'#5c52e6',800:'#4c42c2',900:'#3e379e' } } } } }</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+    <nav id="navbar"></nav>
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Welcome Banner -->
+            <div class="glass p-6 rounded-2xl border border-white/5 mb-8 flex items-center gap-6">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black text-white" id="user-avatar-initials">?</div>
+                <div class="flex-grow">
+                    <p class="text-xs text-indigo-200/40 mb-0.5">Welcome back!</p>
+                    <h2 class="text-2xl font-extrabold text-white" id="welcome-name">Loading...</h2>
+                    <p class="text-xs text-indigo-200/40 mt-0.5" id="welcome-email">...</p>
+                </div>
+                <a href="profile.html" class="btn-outline py-2 px-5 rounded-xl text-sm hidden sm:flex items-center gap-2">
+                    <i class="fas fa-user-cog text-xs"></i> Edit Profile
+                </a>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="stats-row">
+                <div class="glass p-5 rounded-2xl border border-white/5 flex flex-col gap-1">
+                    <span class="text-2xl">📦</span>
+                    <p class="text-2xl font-black text-white mt-2" id="stat-orders">-</p>
+                    <p class="text-xs text-indigo-200/40">Total Orders</p>
+                </div>
+                <div class="glass p-5 rounded-2xl border border-white/5 flex flex-col gap-1">
+                    <span class="text-2xl">💝</span>
+                    <p class="text-2xl font-black text-white mt-2" id="stat-wishlist">-</p>
+                    <p class="text-xs text-indigo-200/40">Wishlist Items</p>
+                </div>
+                <div class="glass p-5 rounded-2xl border border-white/5 flex flex-col gap-1">
+                    <span class="text-2xl">🛒</span>
+                    <p class="text-2xl font-black text-white mt-2" id="stat-cart">-</p>
+                    <p class="text-xs text-indigo-200/40">Cart Items</p>
+                </div>
+                <div class="glass p-5 rounded-2xl border border-white/5 flex flex-col gap-1">
+                    <span class="text-2xl">💰</span>
+                    <p class="text-xl font-black text-white mt-2" id="stat-spent">-</p>
+                    <p class="text-xs text-indigo-200/40">Total Spent</p>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex gap-2 mb-6 flex-wrap" role="tablist">
+                <button onclick="switchTab('orders')" id="tab-orders" class="tab-btn active py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass transition">Orders</button>
+                <button onclick="switchTab('wishlist')" id="tab-wishlist" class="tab-btn py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass transition">Wishlist</button>
+                <button onclick="switchTab('reviews')" id="tab-reviews" class="tab-btn py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass transition">Reviews</button>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="panel-orders" class="tab-panel">
+                <div class="flex flex-col gap-4" id="orders-list">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Wishlist Tab -->
+            <div id="panel-wishlist" class="tab-panel hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5" id="wishlist-list"></div>
+            </div>
+
+            <!-- Reviews Tab -->
+            <div id="panel-reviews" class="tab-panel hidden">
+                <div class="flex flex-col gap-4" id="reviews-list"></div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/customer-dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavbar();
+            initFooter();
+            initCustomerDashboard();
+        });
+    </script>
+
+    <style>
+        .tab-btn { color: rgba(165,148,255,0.5); }
+        .tab-btn.active { background: rgba(108, 99, 255, 0.15); border-color: rgba(108,99,255,0.3); color: #a79eff; }
+    </style>
+</body>
+</html>

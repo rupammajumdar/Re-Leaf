@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile — Re-Leaf Book</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { indigo: { 50:'#f5f4ff',100:'#ebe9ff',200:'#dcd8ff',300:'#c5beff',400:'#a79eff',500:'#877aff',600:'#6c63ff',700:'#5c52e6',800:'#4c42c2',900:'#3e379e' } } } } }</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+    <nav id="navbar"></nav>
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-2xl mx-auto px-4">
+            <h1 class="text-3xl font-extrabold text-white mb-8">My Profile</h1>
+
+            <!-- Avatar & Name Banner -->
+            <div class="glass p-6 rounded-2xl border border-white/5 flex items-center gap-6 mb-6">
+                <div class="relative">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl font-black text-white" id="avatar-initials">?</div>
+                    <div class="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 rounded-full border-2 border-[#0F0F1A]"></div>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-white" id="profile-name">Loading...</h2>
+                    <p class="text-xs text-indigo-200/40 mt-0.5" id="profile-email"></p>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mt-2 inline-block" id="profile-role"></span>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-6">
+                <button onclick="switchProfileTab('info')" id="ptab-info" class="ptab active py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass">Personal Info</button>
+                <button onclick="switchProfileTab('password')" id="ptab-password" class="ptab py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass">Change Password</button>
+                <button onclick="switchProfileTab('addresses')" id="ptab-addresses" class="ptab py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass">Addresses</button>
+            </div>
+
+            <!-- Personal Info -->
+            <form id="panel-info" onsubmit="saveProfile(event)" class="glass p-8 rounded-2xl border border-white/5 flex flex-col gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Full Name</label>
+                        <input type="text" id="p-fullname" class="input-glass w-full">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Phone</label>
+                        <input type="tel" id="p-phone" class="input-glass w-full" placeholder="+91 9876543210">
+                    </div>
+                    <div class="flex flex-col gap-1.5 sm:col-span-2">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Email (read-only)</label>
+                        <input type="email" id="p-email" class="input-glass w-full opacity-50" readonly>
+                    </div>
+                    <div class="flex flex-col gap-1.5 sm:col-span-2">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Bio</label>
+                        <textarea id="p-bio" rows="3" class="input-glass w-full resize-none" placeholder="Tell us a bit about yourself..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary py-3 px-8 rounded-xl font-bold text-sm self-end flex items-center gap-2">
+                    <i class="fas fa-save text-xs"></i> Save Changes
+                </button>
+            </form>
+
+            <!-- Change Password -->
+            <form id="panel-password" onsubmit="changePassword(event)" class="hidden glass p-8 rounded-2xl border border-white/5 flex flex-col gap-5">
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Current Password</label>
+                        <input type="password" id="p-current-pw" class="input-glass w-full" placeholder="••••••••">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">New Password</label>
+                        <input type="password" id="p-new-pw" class="input-glass w-full" placeholder="Min 6 characters">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Confirm New Password</label>
+                        <input type="password" id="p-confirm-pw" class="input-glass w-full" placeholder="Repeat new password">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary py-3 px-8 rounded-xl font-bold text-sm self-end flex items-center gap-2">
+                    <i class="fas fa-lock text-xs"></i> Update Password
+                </button>
+            </form>
+
+            <!-- Addresses -->
+            <div id="panel-addresses" class="hidden glass p-8 rounded-2xl border border-white/5 flex flex-col gap-5">
+                <p class="text-xs text-indigo-200/40">Your saved delivery addresses will appear here after you place orders. Address management can be configured during checkout.</p>
+                <div id="saved-addresses" class="flex flex-col gap-3 text-xs">
+                    <div class="glass p-4 rounded-xl border border-white/5 text-indigo-200/40 text-center py-8">
+                        No saved addresses yet. Addresses are auto-saved from your orders.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="glass p-5 rounded-2xl border border-red-500/10 mt-6">
+                <h4 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-3">Danger Zone</h4>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-white font-semibold">Delete Account</p>
+                        <p class="text-[10px] text-indigo-200/30">Permanently delete your account and all data. This cannot be undone.</p>
+                    </div>
+                    <button onclick="confirmDeleteAccount()" class="text-xs text-red-400 border border-red-500/20 glass py-2 px-4 rounded-xl hover:bg-red-500/10 transition">Delete</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        async function initProfilePage() {
+            requireAuth();
+            showLoadingSpinner();
+            try {
+                const res = await API.getProfile();
+                const user = res.data;
+                const initials = (user.fullName || user.email || 'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+                document.getElementById('avatar-initials').textContent = initials;
+                document.getElementById('profile-name').textContent = user.fullName || 'User';
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('profile-role').textContent = user.role;
+                document.getElementById('p-fullname').value = user.fullName || '';
+                document.getElementById('p-phone').value = user.phone || '';
+                document.getElementById('p-email').value = user.email;
+                document.getElementById('p-bio').value = user.bio || '';
+            } catch(e) {}
+            hideLoadingSpinner();
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            showLoadingSpinner();
+            try {
+                await API.updateProfile({
+                    fullName: document.getElementById('p-fullname').value.trim(),
+                    phone: document.getElementById('p-phone').value.trim(),
+                    bio: document.getElementById('p-bio').value.trim()
+                });
+                showToast('Profile updated successfully!', 'success');
+                initProfilePage();
+            } catch(err) {}
+            hideLoadingSpinner();
+        }
+
+        async function changePassword(e) {
+            e.preventDefault();
+            const current = document.getElementById('p-current-pw').value;
+            const newPw = document.getElementById('p-new-pw').value;
+            const confirm = document.getElementById('p-confirm-pw').value;
+            if (newPw !== confirm) { showToast('Passwords do not match', 'warning'); return; }
+            if (newPw.length < 6) { showToast('Password must be at least 6 characters', 'warning'); return; }
+            showLoadingSpinner();
+            try {
+                await API.changePassword({ currentPassword: current, newPassword: newPw });
+                showToast('Password changed!', 'success');
+                document.getElementById('p-current-pw').value = '';
+                document.getElementById('p-new-pw').value = '';
+                document.getElementById('p-confirm-pw').value = '';
+            } catch(err) {}
+            hideLoadingSpinner();
+        }
+
+        function confirmDeleteAccount() {
+            if (confirm('Are you absolutely sure you want to delete your account? This cannot be undone.')) {
+                if (confirm('Last chance: all your data will be permanently erased. Continue?')) {
+                    showToast('Account deletion is disabled in demo mode.', 'info');
+                }
+            }
+        }
+
+        function switchProfileTab(tab) {
+            document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+            ['info','password','addresses'].forEach(t => {
+                const p = document.getElementById(`panel-${t}`);
+                if (p) p.classList.toggle('hidden', t !== tab);
+            });
+            document.getElementById(`ptab-${tab}`).classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavbar();
+            initFooter();
+            initProfilePage();
+        });
+    </script>
+
+    <style>
+        .input-glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 0.625rem 0.875rem; color: #fff; font-size: 0.875rem; outline: none; transition: border-color 0.2s; }
+        .input-glass:focus { border-color: rgba(108,99,255,0.4); }
+        .input-glass::placeholder { color: rgba(165,148,255,0.2); }
+        .ptab { color: rgba(165,148,255,0.5); }
+        .ptab.active { background: rgba(108,99,255,0.15); border-color: rgba(108,99,255,0.3); color: #a79eff; }
+    </style>
+</body>
+</html>

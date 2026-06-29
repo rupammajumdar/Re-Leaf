@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order — Re-Leaf Book</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { indigo: { 50:'#f5f4ff',100:'#ebe9ff',200:'#dcd8ff',300:'#c5beff',400:'#a79eff',500:'#877aff',600:'#6c63ff',700:'#5c52e6',800:'#4c42c2',900:'#3e379e' } } } } }</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+    <nav id="navbar"></nav>
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-3xl mx-auto px-4">
+            <h1 class="text-3xl font-extrabold text-white mb-2">Order Tracking</h1>
+            <p class="text-indigo-200/40 text-sm mb-8">Live status of your book delivery</p>
+
+            <div id="order-detail-card" class="glass p-8 rounded-2xl border border-white/5">
+                <!-- Populated dynamically -->
+                <div class="animate-pulse flex flex-col gap-4">
+                    <div class="h-6 skeleton w-1/2"></div>
+                    <div class="h-4 skeleton w-1/3"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        const STATUS_STEPS = ['ORDERED','CONFIRMED','SHIPPED','DELIVERED'];
+        const STATUS_ICONS = { ORDERED: 'fa-box', CONFIRMED: 'fa-check-circle', SHIPPED: 'fa-truck', DELIVERED: 'fa-home', CANCELLED: 'fa-times-circle' };
+        const STATUS_LABELS = { ORDERED: 'Order Placed', CONFIRMED: 'Confirmed by Seller', SHIPPED: 'Shipped', DELIVERED: 'Delivered', CANCELLED: 'Cancelled' };
+
+        async function initTrackingPage() {
+            requireAuth();
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('orderId');
+            if (!orderId) { window.location.href = 'customer-dashboard.html'; return; }
+
+            const card = document.getElementById('order-detail-card');
+            try {
+                const res = await API.getOrderById(orderId);
+                const order = res.data;
+                const statusIdx = STATUS_STEPS.indexOf(order.deliveryStatus);
+                const isCancelled = order.deliveryStatus === 'CANCELLED';
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-6 pb-4 border-b border-white/5">
+                        <div>
+                            <p class="text-xs text-indigo-200/40">Order ID</p>
+                            <p class="font-bold text-white font-mono text-sm">#${order.id}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-indigo-200/40">Placed On</p>
+                            <p class="font-semibold text-white text-sm">${formatDate(order.orderedAt)}</p>
+                        </div>
+                    </div>
+
+                    <!-- Progress Stepper -->
+                    <div class="flex items-start gap-0 mb-8 ${isCancelled ? 'opacity-40' : ''}">
+                        ${STATUS_STEPS.map((s, i) => {
+                            const done = i <= statusIdx && !isCancelled;
+                            const active = i === statusIdx && !isCancelled;
+                            return `<div class="flex flex-col items-center flex-1">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 ${active ? 'border-indigo-500 bg-indigo-500/20 text-indigo-400' : done ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400' : 'border-white/10 text-indigo-200/20'}">
+                                    <i class="fas ${STATUS_ICONS[s]} text-sm"></i>
+                                </div>
+                                <p class="text-[10px] text-center mt-1 font-semibold ${active ? 'text-indigo-400' : done ? 'text-emerald-400' : 'text-indigo-200/20'}">${STATUS_LABELS[s]}</p>
+                                ${i < STATUS_STEPS.length - 1 ? `<div class="hidden"></div>` : ''}
+                            </div>` +
+                            (i < STATUS_STEPS.length - 1 ? `<div class="flex-grow h-px ${done && i < statusIdx ? 'bg-emerald-500' : 'bg-white/5'} mt-5 mx-1"></div>` : '');
+                        }).join('')}
+                    </div>
+
+                    ${isCancelled ? `<div class="bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-4 py-3 rounded-xl mb-4">This order has been cancelled.</div>` : ''}
+
+                    <!-- Items -->
+                    <div class="flex flex-col gap-3 mb-6">
+                        ${order.items.map(item => `
+                            <div class="flex gap-3 items-center glass p-3 rounded-xl border border-white/5">
+                                <div class="w-12 h-14 bg-white/5 rounded-lg overflow-hidden shrink-0">
+                                    <img src="${item.image || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=80'}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow">
+                                    <p class="font-semibold text-white text-xs">${item.title}</p>
+                                    <p class="text-[10px] text-indigo-200/40">by ${item.author} · Qty: ${item.quantity}</p>
+                                </div>
+                                <span class="font-bold text-white text-sm">${formatPrice(item.finalPrice * item.quantity)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Payment Summary -->
+                    <div class="flex justify-between text-sm border-t border-white/5 pt-4">
+                        <div><p class="text-xs text-indigo-200/40">Payment</p><p class="font-bold text-white">${order.paymentMethod.replace(/_/g,' ')} · ${order.paymentStatus}</p></div>
+                        <div class="text-right"><p class="text-xs text-indigo-200/40">Total Paid</p><p class="font-black text-indigo-400 text-xl">${formatPrice(order.finalAmount)}</p></div>
+                    </div>
+                `;
+            } catch(e) {
+                card.innerHTML = `<p class="text-red-400 text-sm text-center py-8">Could not load order details. <a href="customer-dashboard.html" class="text-indigo-400 underline">Go back</a></p>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavbar();
+            initFooter();
+            initTrackingPage();
+        });
+    </script>
+</body>
+</html>

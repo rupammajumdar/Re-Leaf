@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 — Server Error | Re-Leaf Book</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { indigo: { 50:'#f5f4ff',100:'#ebe9ff',200:'#dcd8ff',300:'#c5beff',400:'#a79eff',500:'#877aff',600:'#6c63ff',700:'#5c52e6',800:'#4c42c2',900:'#3e379e' } } } } }</script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .pulse-anim { animation: pulseGlow 3s ease-in-out infinite; }
+        @keyframes pulseGlow { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-[#0F0F1A] overflow-hidden relative">
+    <div class="absolute w-96 h-96 bg-red-600/10 rounded-full blur-[100px] top-1/3 left-1/3"></div>
+    
+    <div class="text-center px-4 relative z-10">
+        <div class="pulse-anim">
+            <h1 class="text-[10rem] sm:text-[14rem] font-black leading-none" style="
+                background: linear-gradient(135deg, #ef4444, #f97316);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                filter: drop-shadow(0 0 60px rgba(239,68,68,0.2));
+            ">500</h1>
+        </div>
+
+        <div class="text-6xl -mt-8 mb-4">⚙️</div>
+        <h2 class="text-2xl font-bold text-white mb-2">Server Error</h2>
+        <p class="text-indigo-200/40 text-sm mb-8 max-w-sm mx-auto">
+            Something went wrong on our end. We're working on fixing it. Please try again in a moment.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onclick="window.history.back()" class="btn-outline py-3 px-8 rounded-xl font-bold">
+                <i class="fas fa-arrow-left mr-2"></i> Go Back
+            </button>
+            <a href="index.html" class="btn-primary py-3 px-8 rounded-xl font-bold">
+                <i class="fas fa-home mr-2"></i> Home Page
+            </a>
+        </div>
+        <p class="text-indigo-200/20 text-xs mt-10">Error Code: 500 · Internal Server Error</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard — Re-Leaf Book</title>
+    <meta name="description" content="Manage your book listings, orders, and earnings as a seller on Re-Leaf Book.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { indigo: { 50:'#f5f4ff',100:'#ebe9ff',200:'#dcd8ff',300:'#c5beff',400:'#a79eff',500:'#877aff',600:'#6c63ff',700:'#5c52e6',800:'#4c42c2',900:'#3e379e' } } } } }</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+    <nav id="navbar"></nav>
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-white">Seller Dashboard</h1>
+                    <p class="text-indigo-200/40 text-sm mt-1">Manage your books, orders & earnings</p>
+                </div>
+                <a href="seller-add-book.html" id="add-book-btn" class="btn-primary py-2.5 px-5 rounded-xl text-sm font-bold flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Add New Book
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="glass p-5 rounded-2xl border border-white/5">
+                    <span class="text-2xl">📚</span>
+                    <p class="text-2xl font-black text-white mt-2" id="stat-listings">-</p>
+                    <p class="text-xs text-indigo-200/40">Active Listings</p>
+                </div>
+                <div class="glass p-5 rounded-2xl border border-white/5">
+                    <span class="text-2xl">🛒</span>
+                    <p class="text-2xl font-black text-white mt-2" id="stat-orders">-</p>
+                    <p class="text-xs text-indigo-200/40">Total Orders</p>
+                </div>
+                <div class="glass p-5 rounded-2xl border border-white/5">
+                    <span class="text-2xl">💸</span>
+                    <p class="text-xl font-black text-white mt-2" id="stat-revenue">-</p>
+                    <p class="text-xs text-indigo-200/40">Total Revenue</p>
+                </div>
+                <div class="glass p-5 rounded-2xl border border-white/5">
+                    <span class="text-2xl">⭐</span>
+                    <p class="text-2xl font-black text-white mt-2" id="stat-rating">-</p>
+                    <p class="text-xs text-indigo-200/40">Avg. Rating</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-6 flex-wrap" role="tablist">
+                <button onclick="switchTab('listings')" id="tab-listings" class="tab-btn active py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass transition">My Books</button>
+                <button onclick="switchTab('orders')" id="tab-orders" class="tab-btn py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass transition">Orders Received</button>
+                <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn py-2 px-5 rounded-xl text-sm font-semibold border border-white/5 glass transition">Analytics</button>
+            </div>
+
+            <!-- Listings Tab -->
+            <div id="panel-listings" class="tab-panel">
+                <div id="listings-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="panel-orders" class="tab-panel hidden">
+                <div id="seller-orders-list" class="flex flex-col gap-4"></div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="panel-analytics" class="tab-panel hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass p-6 rounded-2xl border border-white/5">
+                        <h4 class="font-bold text-white text-sm mb-4">Revenue Overview</h4>
+                        <div id="revenue-chart" class="flex items-end gap-2 h-32"></div>
+                    </div>
+                    <div class="glass p-6 rounded-2xl border border-white/5">
+                        <h4 class="font-bold text-white text-sm mb-4">Top Selling Books</h4>
+                        <div id="top-books" class="flex flex-col gap-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/seller-dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavbar();
+            initFooter();
+            initSellerDashboard();
+        });
+    </script>
+
+    <style>
+        .tab-btn { color: rgba(165,148,255,0.5); }
+        .tab-btn.active { background: rgba(108, 99, 255, 0.15); border-color: rgba(108,99,255,0.3); color: #a79eff; }
+    </style>
+</body>
+</html>

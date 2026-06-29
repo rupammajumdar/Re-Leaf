@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — Re-Leaf Book</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            50: '#f5f4ff', 100: '#ebe9ff', 200: '#dcd8ff', 300: '#c5beff', 400: '#a79eff', 500: '#877aff', 600: '#6c63ff', 700: '#5c52e6', 800: '#4c42c2', 900: '#3e379e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+
+    <!-- Navbar -->
+    <nav id="navbar"></nav>
+
+    <main class="flex-grow pt-24 pb-12 flex items-center justify-center px-4 relative">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+            <div class="absolute -top-1/4 -left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-1/4 -right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 glass rounded-3xl overflow-hidden border border-white/5 shadow-2xl animate-fade-in-up">
+            
+            <!-- Left Banner Details -->
+            <div class="hidden md:flex flex-col justify-between p-8 bg-gradient-to-br from-indigo-900/40 to-[#0F0F1A] border-r border-white/5 relative">
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl">🍃</span>
+                    <span class="text-lg font-bold text-white">Re-Leaf <span class="text-indigo-400">Book</span></span>
+                </div>
+                <div class="flex flex-col gap-4 my-auto">
+                    <h2 class="text-3xl font-extrabold text-white leading-tight">Welcome back to the portal.</h2>
+                    <p class="text-sm text-indigo-200/50">Manage listings, browse saved books in your wishlist, or complete your pending order tracking.</p>
+                </div>
+                <p class="text-xs text-indigo-300/30">"Give Your Books a Second Life."</p>
+            </div>
+
+            <!-- Right Login Form -->
+            <div class="p-8 flex flex-col gap-6 justify-center bg-white/3">
+                <div class="text-center md:text-left">
+                    <h1 class="text-2xl font-bold text-white mb-1">Sign In</h1>
+                    <p class="text-xs text-indigo-200/50">Access your customer profile or seller console</p>
+                </div>
+
+                <!-- Mode/Role tab toggles -->
+                <div class="grid grid-cols-2 p-1 bg-white/5 rounded-xl border border-white/5" id="login-role-tabs">
+                    <button class="py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-xl transition" id="tab-customer">Customer</button>
+                    <button class="py-2 text-xs font-semibold rounded-lg text-indigo-200 hover:text-white transition" id="tab-seller">Seller</button>
+                </div>
+
+                <!-- Forms -->
+                <form id="login-form" class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-indigo-200/60">Email Address</label>
+                        <div class="flex items-center gap-3 glass border border-white/5 px-3 py-2.5 rounded-xl">
+                            <i class="fas fa-envelope text-indigo-300/30 text-sm"></i>
+                            <input type="email" id="email" required placeholder="name@domain.com" class="bg-transparent text-sm w-full text-white placeholder-indigo-200/20 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-semibold text-indigo-200/60">Password</label>
+                            <a href="#" id="forgot-password-link" class="text-xs text-indigo-400 hover:underline">Forgot password?</a>
+                        </div>
+                        <div class="flex items-center gap-3 glass border border-white/5 px-3 py-2.5 rounded-xl">
+                            <i class="fas fa-lock text-indigo-300/30 text-sm"></i>
+                            <input type="password" id="password" required placeholder="••••••••" class="bg-transparent text-sm w-full text-white placeholder-indigo-200/20 focus:outline-none">
+                            <button type="button" id="toggle-pwd-btn" class="text-indigo-300/40 hover:text-white transition focus:outline-none">
+                                <i class="fas fa-eye text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-2 text-xs text-indigo-200/50 cursor-pointer">
+                            <input type="checkbox" id="remember-me" class="rounded bg-transparent border-white/10 text-indigo-600 focus:ring-0">
+                            Remember Me
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full py-3 rounded-xl font-bold text-sm tracking-wide mt-2">
+                        Sign In Account
+                    </button>
+                </form>
+
+                <p class="text-center text-xs text-indigo-200/40">
+                    Don't have an account? <a href="register.html" class="text-indigo-400 font-semibold hover:underline">Register</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        let selectedRole = 'CUSTOMER'; // DEFAULT
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            initNavbar();
+            initFooter();
+            redirectIfLoggedIn();
+            
+            // Check params for email verification
+            const params = new URLSearchParams(window.location.search);
+            const verifyToken = params.get('verify_token');
+            if (verifyToken) {
+                showLoadingSpinner();
+                try {
+                    await API.verifyEmail(verifyToken);
+                    showToast('Email verified successfully! You can now log in.', 'success');
+                } catch(e) {}
+                hideLoadingSpinner();
+            }
+
+            // Tabs toggle listener
+            const tabCust = document.getElementById('tab-customer');
+            const tabSell = document.getElementById('tab-seller');
+            
+            tabCust.addEventListener('click', () => {
+                selectedRole = 'CUSTOMER';
+                tabCust.className = "py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-xl transition";
+                tabSell.className = "py-2 text-xs font-semibold rounded-lg text-indigo-200 hover:text-white transition";
+            });
+
+            tabSell.addEventListener('click', () => {
+                selectedRole = 'SELLER';
+                tabSell.className = "py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-xl transition";
+                tabCust.className = "py-2 text-xs font-semibold rounded-lg text-indigo-200 hover:text-white transition";
+            });
+
+            // Password eye toggle
+            const pwdInput = document.getElementById('password');
+            const pwdToggle = document.getElementById('toggle-pwd-btn');
+            pwdToggle.addEventListener('click', () => {
+                const isPwd = pwdInput.type === 'password';
+                pwdInput.type = isPwd ? 'text' : 'password';
+                pwdToggle.querySelector('i').className = isPwd ? 'fas fa-eye-slash text-sm' : 'fas fa-eye text-sm';
+            });
+
+            // Login submission handler
+            const loginForm = document.getElementById('login-form');
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value.trim();
+                const password = pwdInput.value;
+                const rememberMe = document.getElementById('remember-me').checked;
+
+                showLoadingSpinner();
+                try {
+                    const res = await API.login({ email, password, rememberMe });
+                    // Verify if role matches selection
+                    if (res.data.role !== selectedRole) {
+                        showToast(`This email is registered as ${res.data.role}, not ${selectedRole}. Please login with correct role selection.`, 'warning');
+                        hideLoadingSpinner();
+                        return;
+                    }
+                    
+                    saveAuthData(res.data.token, res.data.refreshToken, {
+                        id: res.data.id,
+                        name: res.data.name,
+                        email: res.data.email,
+                        role: res.data.role,
+                        profileImage: res.data.profileImage
+                    });
+
+                    showToast('Welcome back, ' + res.data.name + '!', 'success');
+                    setTimeout(() => {
+                        if (res.data.role === 'SELLER') {
+                            window.location.href = 'seller-dashboard.html';
+                        } else {
+                            window.location.href = 'customer-dashboard.html';
+                        }
+                    }, 1000);
+
+                } catch (error) {
+                    // API request method triggers failure toast
+                } finally {
+                    hideLoadingSpinner();
+                }
+            });
+
+            // Forgot password handler
+            document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value.trim();
+                if (!email) {
+                    showToast('Please type your email address first', 'warning');
+                    return;
+                }
+                showLoadingSpinner();
+                try {
+                    await API.forgotPassword(email);
+                    showToast('Password reset link has been dispatched to your email!', 'success');
+                } catch(e) {}
+                hideLoadingSpinner();
+            });
+        });
+    </script>
+</body>
+</html>

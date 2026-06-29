@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details — Re-Leaf Book</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            50: '#f5f4ff', 100: '#ebe9ff', 200: '#dcd8ff', 300: '#c5beff', 400: '#a79eff', 500: '#877aff', 600: '#6c63ff', 700: '#5c52e6', 800: '#4c42c2', 900: '#3e379e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+
+    <nav id="navbar"></nav>
+
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Book Details Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12" id="detail-layout">
+                
+                <!-- Left: Image Slider and Thumbnails -->
+                <div class="flex flex-col gap-4 animate-fade-in-down">
+                    <div class="glass-card aspect-[3/4] overflow-hidden relative flex items-center justify-center p-4 bg-white/3">
+                        <img id="main-book-image" src="" alt="Book Cover" class="max-h-full max-w-full object-contain rounded-xl">
+                        <span id="detail-condition" class="absolute top-4 left-4"></span>
+                    </div>
+                    <!-- Thumbnails list -->
+                    <div class="flex gap-3 overflow-x-auto pb-2" id="thumbnails-container">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Right: Metadata & Purchase Box -->
+                <div class="flex flex-col gap-6 animate-fade-in-up">
+                    <div class="border-b border-white/5 pb-4">
+                        <span id="detail-category" class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Category</span>
+                        <h1 id="detail-title" class="text-3xl font-extrabold text-white mt-1 leading-tight">Book Title</h1>
+                        <p id="detail-author" class="text-sm text-indigo-200/60 mt-1">by Author Name</p>
+                    </div>
+
+                    <!-- Price layout -->
+                    <div class="flex flex-col gap-1 bg-white/3 border border-white/5 p-5 rounded-2xl">
+                        <div class="flex items-baseline gap-3">
+                            <span id="detail-final-price" class="text-3xl font-black text-white">₹00</span>
+                            <span id="detail-original-price" class="text-sm text-indigo-200/30 line-through">₹00</span>
+                            <span id="detail-discount-badge" class="bg-pink-500 text-white font-bold text-xs px-2.5 py-0.5 rounded-lg">0% OFF</span>
+                        </div>
+                        <p class="text-xs text-indigo-200/40 mt-1"><i class="fas fa-truck-moving mr-1 text-indigo-400"></i> Home delivery charge: <span id="delivery-info">₹40</span></p>
+                    </div>
+
+                    <!-- Cart and Wishlist triggers -->
+                    <div class="flex gap-4">
+                        <button id="add-to-cart-btn" class="btn-primary flex-grow py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 text-sm shadow-xl">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button id="add-to-wish-btn" class="btn-outline px-5 py-3.5 rounded-xl flex items-center justify-center text-indigo-200 hover:text-white transition">
+                            <i class="far fa-heart text-lg" id="wishlist-icon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Seller card detail -->
+                    <div class="glass border border-white/5 p-4 rounded-2xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-400" id="seller-avatar">S</div>
+                            <div>
+                                <h4 class="font-bold text-xs text-white" id="seller-name">Seller Name</h4>
+                                <p class="text-[10px] text-indigo-200/40">Student Seller</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/20 px-3 py-1 rounded-xl text-yellow-400 text-xs">
+                            <i class="fas fa-star"></i>
+                            <span class="font-bold" id="seller-rating">0.0</span>
+                        </div>
+                    </div>
+
+                    <!-- Info tabs spec -->
+                    <div class="glass border border-white/5 rounded-2xl p-6 flex flex-col gap-4">
+                        <h4 class="font-bold text-sm text-white">Book Information</h4>
+                        <div class="grid grid-cols-2 gap-y-3 gap-x-6 text-xs leading-relaxed">
+                            <div class="flex justify-between border-b border-white/3 pb-1"><span class="text-indigo-200/50">ISBN</span><span class="text-white font-medium truncate max-w-[150px]" id="info-isbn">-</span></div>
+                            <div class="flex justify-between border-b border-white/3 pb-1"><span class="text-indigo-200/50">Edition</span><span class="text-white font-medium" id="info-edition">-</span></div>
+                            <div class="flex justify-between border-b border-white/3 pb-1"><span class="text-indigo-200/50">Publisher</span><span class="text-white font-medium truncate max-w-[150px]" id="info-publisher">-</span></div>
+                            <div class="flex justify-between border-b border-white/3 pb-1"><span class="text-indigo-200/50">Language</span><span class="text-white font-medium" id="info-language">-</span></div>
+                            <div class="flex justify-between border-b border-white/3 pb-1"><span class="text-indigo-200/50">Pages</span><span class="text-white font-medium" id="info-pages">-</span></div>
+                            <div class="flex justify-between border-b border-white/3 pb-1"><span class="text-indigo-200/50">Stock</span><span class="text-white font-medium" id="info-stock">-</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="flex flex-col gap-2">
+                        <h4 class="font-bold text-sm text-indigo-100">Description</h4>
+                        <p id="detail-desc" class="text-xs text-indigo-200/70 leading-relaxed">No description provided for this listing.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Customer Reviews Section -->
+            <section class="mt-16 reveal border-t border-white/5 pt-12">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-1">Customer Reviews</h2>
+                        <div class="flex items-center gap-2 mt-1">
+                            <div id="reviews-stars" class="flex gap-1 text-xs text-yellow-400"></div>
+                            <span class="text-xs text-indigo-200/50 font-semibold" id="reviews-average-text">0.0 out of 5 stars</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left: Star ratings breakdown card -->
+                    <div class="glass p-6 rounded-2xl border border-white/5 flex flex-col gap-4 self-start">
+                        <h4 class="font-bold text-sm text-white border-b border-white/5 pb-2">Review Distribution</h4>
+                        <div class="flex flex-col gap-2" id="rating-breakdown">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                    <!-- Right: Review Feed -->
+                    <div class="lg:col-span-2 flex flex-col gap-6" id="reviews-feed">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer id="footer"></footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/book-detail.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavbar();
+            initFooter();
+            initBookDetailPage();
+        });
+    </script>
+</body>
+</html>

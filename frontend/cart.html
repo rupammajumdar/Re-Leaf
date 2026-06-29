@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart — Re-Leaf Book</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            50: '#f5f4ff', 100: '#ebe9ff', 200: '#dcd8ff', 300: '#c5beff', 400: '#a79eff', 500: '#877aff', 600: '#6c63ff', 700: '#5c52e6', 800: '#4c42c2', 900: '#3e379e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+
+    <nav id="navbar"></nav>
+
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-extrabold text-white mb-8">Shopping Cart</h1>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" id="cart-layout">
+                
+                <!-- Left: List of Cart Items -->
+                <div class="lg:col-span-2 flex flex-col gap-4" id="cart-items-container">
+                    <!-- Skeleton or Cart Items Injected Dynamically -->
+                </div>
+
+                <!-- Right: Summary calculations box -->
+                <div class="flex flex-col gap-6" id="summary-box">
+                    <div class="glass p-6 rounded-2xl border border-white/5 flex flex-col gap-5 self-start w-full">
+                        <h3 class="font-bold text-sm text-white border-b border-white/5 pb-3">Order Summary</h3>
+                        
+                        <!-- Calculation List -->
+                        <div class="flex flex-col gap-3 text-xs">
+                            <div class="flex justify-between text-indigo-200/50"><span>Subtotal</span><span class="text-white" id="subtotal-val">₹0</span></div>
+                            <div class="flex justify-between text-indigo-200/50"><span>GST (18%)</span><span class="text-white" id="gst-val">₹0</span></div>
+                            <div class="flex justify-between text-indigo-200/50"><span>Shipping</span><span class="text-white" id="shipping-val">₹0</span></div>
+                            <div class="flex justify-between text-emerald-400 hidden" id="discount-row"><span>Discount</span><span id="discount-val">-₹0</span></div>
+                            <hr class="border-white/5 my-1">
+                            <div class="flex justify-between text-sm font-bold text-white"><span>Grand Total</span><span class="text-lg text-indigo-400" id="grand-total-val">₹0</span></div>
+                        </div>
+
+                        <!-- Coupon Code Field -->
+                        <form id="coupon-form" class="flex gap-2">
+                            <input type="text" id="coupon-code-input" placeholder="Coupon Code (e.g. SAVE10)" class="glass px-3 py-2.5 rounded-xl text-xs text-white bg-transparent border-white/10 w-full focus:outline-none">
+                            <button type="submit" class="btn-outline py-2 px-4 text-xs font-semibold rounded-xl">Apply</button>
+                        </form>
+                        <div id="coupon-feedback" class="text-[10px] hidden"></div>
+
+                        <!-- Checkout Button -->
+                        <button id="checkout-btn" class="btn-primary w-full py-3.5 rounded-xl font-bold text-xs tracking-wide shadow-xl flex items-center justify-center gap-2">
+                            Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer"></footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavbar();
+            initFooter();
+            initCartPage();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book — Re-Leaf Book</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { indigo: { 50:'#f5f4ff',100:'#ebe9ff',200:'#dcd8ff',300:'#c5beff',400:'#a79eff',500:'#877aff',600:'#6c63ff',700:'#5c52e6',800:'#4c42c2',900:'#3e379e' } } } } }</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="min-h-screen flex flex-col bg-[#0F0F1A]">
+    <nav id="navbar"></nav>
+    <main class="flex-grow pt-24 pb-12">
+        <div class="max-w-2xl mx-auto px-4">
+            <div class="flex items-center gap-3 mb-8">
+                <a href="seller-dashboard.html" class="text-indigo-400 hover:text-indigo-300 transition"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="text-3xl font-extrabold text-white">Edit Book Listing</h1>
+            </div>
+
+            <form id="edit-book-form" class="glass p-8 rounded-2xl border border-white/5 flex flex-col gap-5">
+                
+                <!-- Image -->
+                <div>
+                    <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider block mb-2">Cover Image URL</label>
+                    <div class="flex gap-3 items-start">
+                        <div class="w-24 h-32 rounded-xl bg-white/5 border border-white/5 overflow-hidden shrink-0 flex items-center justify-center" id="img-preview">
+                            <i class="fas fa-image text-indigo-200/20 text-2xl"></i>
+                        </div>
+                        <div class="flex-grow flex flex-col gap-2">
+                            <input type="url" id="book-image" placeholder="https://..." class="input-glass w-full" oninput="previewImage(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="sm:col-span-2 flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Title *</label>
+                        <input type="text" id="book-title" required class="input-glass w-full">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Author *</label>
+                        <input type="text" id="book-author" required class="input-glass w-full">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Genre *</label>
+                        <select id="book-genre" required class="input-glass w-full">
+                            <option value="">Select genre</option>
+                            <option>Fiction</option><option>Non-Fiction</option><option>Mystery</option>
+                            <option>Thriller</option><option>Romance</option><option>Science Fiction</option>
+                            <option>Fantasy</option><option>Biography</option><option>Self-Help</option>
+                            <option>Business</option><option>Technology</option><option>History</option>
+                            <option>Philosophy</option><option>Children</option><option>Education</option><option>Other</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Condition *</label>
+                        <select id="book-condition" required class="input-glass w-full">
+                            <option value="">Select condition</option>
+                            <option value="LIKE_NEW">Like New</option>
+                            <option value="VERY_GOOD">Very Good</option>
+                            <option value="GOOD">Good</option>
+                            <option value="ACCEPTABLE">Acceptable</option>
+                            <option value="POOR">Poor</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">MRP (₹) *</label>
+                        <input type="number" id="book-mrp" required min="1" class="input-glass w-full">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Selling Price (₹) *</label>
+                        <input type="number" id="book-price" required min="1" class="input-glass w-full">
+                    </div>
+                    <div class="sm:col-span-2 flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Description</label>
+                        <textarea id="book-description" rows="4" class="input-glass w-full resize-none"></textarea>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Status</label>
+                        <select id="book-status" class="input-glass w-full">
+                            <option value="AVAILABLE">Available</option>
+                            <option value="INACTIVE">Mark Inactive (hide from buyers)</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs text-indigo-200/50 font-semibold uppercase tracking-wider">Quantity</label>
+                        <input type="number" id="book-quantity" min="0" class="input-glass w-full">
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-2">
+                    <a href="seller-dashboard.html" class="btn-outline py-3 px-8 rounded-xl font-bold text-sm flex-1 text-center">Cancel</a>
+                    <button type="submit" class="btn-primary py-3 px-8 rounded-xl font-bold text-sm flex-1 flex items-center justify-center gap-2" id="submit-btn">
+                        <i class="fas fa-save text-xs"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        let bookId = null;
+
+        function previewImage(url) {
+            const preview = document.getElementById('img-preview');
+            if (url) {
+                preview.innerHTML = `<img src="${url}" class="w-full h-full object-cover" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\\'fas fa-image text-indigo-200/20 text-2xl\\'></i>'">`;
+            } else {
+                preview.innerHTML = '<i class="fas fa-image text-indigo-200/20 text-2xl"></i>';
+            }
+        }
+
+        async function loadBookData() {
+            const params = new URLSearchParams(window.location.search);
+            bookId = params.get('id');
+            if (!bookId) { window.location.href = 'seller-dashboard.html'; return; }
+
+            showLoadingSpinner();
+            try {
+                const res = await API.getBookById(bookId);
+                const book = res.data;
+
+                // Populate form fields
+                const fill = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+                fill('book-title', book.title);
+                fill('book-author', book.author);
+                fill('book-genre', book.genre);
+                fill('book-condition', book.condition);
+                fill('book-mrp', book.mrp);
+                fill('book-price', book.price);
+                fill('book-description', book.description);
+                fill('book-status', book.status);
+                fill('book-quantity', book.quantity);
+                if (book.images && book.images.length) {
+                    fill('book-image', book.images[0]);
+                    previewImage(book.images[0]);
+                }
+            } catch(e) {
+                showToast('Could not load book data', 'error');
+                window.location.href = 'seller-dashboard.html';
+            }
+            hideLoadingSpinner();
+        }
+
+        document.getElementById('edit-book-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const imgUrl = document.getElementById('book-image').value.trim();
+
+            const bookData = {
+                title: document.getElementById('book-title').value.trim(),
+                author: document.getElementById('book-author').value.trim(),
+                genre: document.getElementById('book-genre').value,
+                condition: document.getElementById('book-condition').value,
+                mrp: parseFloat(document.getElementById('book-mrp').value),
+                price: parseFloat(document.getElementById('book-price').value),
+                description: document.getElementById('book-description').value.trim(),
+                status: document.getElementById('book-status').value,
+                quantity: parseInt(document.getElementById('book-quantity').value) || 0,
+                images: imgUrl ? [imgUrl] : []
+            };
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i> Saving...';
+            showLoadingSpinner();
+
+            try {
+                await API.updateBook(bookId, bookData);
+                hideLoadingSpinner();
+                showToast('✅ Book updated!', 'success');
+                setTimeout(() => window.location.href = 'seller-dashboard.html', 1500);
+            } catch(err) {
+                hideLoadingSpinner();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save text-xs"></i> Save Changes';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            requireAuth(['SELLER', 'ADMIN']);
+            initNavbar();
+            initFooter();
+            loadBookData();
+        });
+    </script>
+
+    <style>
+        .input-glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 0.625rem 0.875rem; color: #fff; font-size: 0.875rem; outline: none; transition: border-color 0.2s; }
+        .input-glass:focus { border-color: rgba(108,99,255,0.4); }
+        .input-glass::placeholder { color: rgba(165,148,255,0.2); }
+        select.input-glass option { background: #1a1a2e; }
+    </style>
+</body>
+</html>
